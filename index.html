@@ -92,4 +92,126 @@
       In my view, lower ticket prices would certainly lead to a rise in international
       travel, particularly among young adults and families who are currently
       restricted by cost. After all, many people already have the desire to see new
-      place
+      places, and what holds them back is financial rather than motivational.
+      However, it is worth pointing out that growing awareness of environmental
+      issues might restrain this trend. So while cheaper air travel would no doubt
+      increase demand, in the long run, governments may have to balance
+      affordability with sustainability.
+    </li>
+
+    <li>
+      <strong>What will become more popular in the future: air travel or train travel?</strong><br><br>
+      That very much depends on the distance involved. For cross-continental
+      journeys, air travel will almost certainly remain dominant, simply because it
+      is so much faster. By contrast, within countries or across short international
+      routes, high-speed trains are becoming increasingly popular, particularly in
+      Europe and parts of Asia, as they are more environmentally friendly and take
+      passengers directly from city center to city center. Personally, I expect
+      trains to expand their share of the market, but it is hard to imagine a future
+      where airplanes are not the preferred option for long-haul travel.
+    </li>
+
+    <li>
+      <strong>What are the advantages and disadvantages of sea travel?</strong><br><br>
+      On the positive side, sea travel can be uniquely relaxing, since passengers
+      are able to enjoy the open scenery and benefit from a slower pace of life. In
+      addition, cruise ships often provide a wide range of entertainment and
+      facilities, which makes the journey itself part of the holiday. Nevertheless,
+      there are clear drawbacks: it is considerably slower than air or rail travel,
+      it can be highly weather-dependent, and for many routes it is simply
+      impractical. Consequently, while sea travel does have its advantages, it is
+      likely to remain a niche option, chosen more for leisure than for everyday
+      transport.
+    </li>
+  </ol>
+</div>
+
+<!-- QUESTIONS -->
+<div id="questionBox" class="box hidden">
+  <h2 id="questionTitle"></h2>
+  <p id="questionText"></p>
+</div>
+
+<script>
+  const SAMPLE_TIME = 5 * 60; // 5 minutes
+  const QUESTION_TIME = 60;  // 1 minute
+
+  const samplesDiv = document.getElementById("samples");
+  const questionBox = document.getElementById("questionBox");
+  const questionTitle = document.getElementById("questionTitle");
+  const questionText = document.getElementById("questionText");
+  const timerDiv = document.getElementById("timer");
+
+  const questions = [
+    { id: 1, text: "What needs to be improved in public transport?" },
+    { id: 2, text: "Will there be fewer cars if public transport is free?" },
+    { id: 3, text: "Who likes to travel more, older people or younger people?" },
+    { id: 4, text: "Will people travel abroad more often if air travel becomes cheaper?" },
+    { id: 5, text: "What will become more popular in the future: air travel or train travel?" },
+    { id: 6, text: "What are the advantages and disadvantages of sea travel?" }
+  ];
+
+  function formatTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  }
+
+  function startCountdown(duration, label, onEnd) {
+    let remaining = duration;
+    timerDiv.textContent = `${label}: ${formatTime(remaining)}`;
+
+    const interval = setInterval(() => {
+      remaining--;
+      timerDiv.textContent = `${label}: ${formatTime(remaining)}`;
+
+      if (remaining <= 0) {
+        clearInterval(interval);
+        onEnd();
+      }
+    }, 1000);
+  }
+
+  function generateAlternatingOrder(items) {
+    const odd = items.filter(q => q.id % 2 !== 0).sort(() => Math.random() - 0.5);
+    const even = items.filter(q => q.id % 2 === 0).sort(() => Math.random() - 0.5);
+
+    const result = [];
+    while (odd.length || even.length) {
+      if (odd.length) result.push(odd.pop());
+      if (even.length) result.push(even.pop());
+    }
+    return result;
+  }
+
+  function startQuestions() {
+    samplesDiv.classList.add("hidden");
+    questionBox.classList.remove("hidden");
+
+    const order = generateAlternatingOrder(questions);
+    let index = 0;
+
+    function showNextQuestion() {
+      if (index >= order.length) {
+        questionTitle.textContent = "Finished";
+        questionText.textContent = "All questions completed.";
+        timerDiv.textContent = "";
+        return;
+      }
+
+      const q = order[index];
+      questionTitle.textContent = `Question ${q.id}`;
+      questionText.textContent = q.text;
+
+      index++;
+      startCountdown(QUESTION_TIME, "Question time left", showNextQuestion);
+    }
+
+    showNextQuestion();
+  }
+
+  startCountdown(SAMPLE_TIME, "Sample study time left", startQuestions);
+</script>
+
+</body>
+</html>
